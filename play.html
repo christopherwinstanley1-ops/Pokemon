@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Play Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="play-mode">
+  <!-- Poké Ball Loading Screen -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="pokeball-spinner"></div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="game-toolbar">
+    <a href="/" class="pill">← Back to Pokédex</a>
+    <div id="gameTitle" class="game-title">Pokémon FireRed (GBA)</div>
+    <button id="fullscreenBtn" class="pill">⤢</button>
+  </div>
+
+  <!-- Emulator container -->
+  <div id="gameContainer" class="game-container">
+    <div id="gameCanvas" class="game-canvas"></div>
+
+    <!-- Touch Controls -->
+    <div class="controls-overlay">
+      <button class="btn a" data-key="x">A</button>
+      <button class="btn b" data-key="z">B</button>
+      <div class="dpad">
+        <button class="up" data-key="ArrowUp"></button>
+        <button class="down" data-key="ArrowDown"></button>
+        <button class="left" data-key="ArrowLeft"></button>
+        <button class="right" data-key="ArrowRight"></button>
+      </div>
+      <button class="btn start" data-key="Enter">Start</button>
+      <button class="btn select" data-key="Shift">Select</button>
+    </div>
+  </div>
+
+  <script>
+    const base = window.location.origin;
+
+    // ✅ Use the official EmulatorJS CDN instead of local /data/
+    const DATA_PATH = "https://cdn.emulatorjs.org/latest/data/";
+    const BIOS = { gba: `${base}/bios/gba_bios.bin` };
+
+    // ✅ Catbox-hosted Pokémon Fire Red ROM (CORS-safe)
+    const romUrl = "https://files.catbox.moe/8r4u1q.gba";
+    const gameName = "Pokémon FireRed";
+
+    // EmulatorJS config
+    window.EJS_player = "#gameCanvas";
+    window.EJS_core = "gba";
+    window.EJS_gameUrl = romUrl;
+    window.EJS_gameName = gameName;
+    window.EJS_pathtodata = DATA_PATH;
+    window.EJS_biosUrl = BIOS.gba;
+    window.EJS_startOnLoaded = true;
+
+    // Load EmulatorJS script
+    const script = document.createElement("script");
+    script.src = `${DATA_PATH}loader.js`;
+    document.body.appendChild(script);
+
+    // Fullscreen toggle
+    document.getElementById("fullscreenBtn").onclick = () => {
+      const el = document.getElementById("gameContainer");
+      if (document.fullscreenElement) document.exitFullscreen();
+      else el.requestFullscreen();
+    };
+
+    // Fade out Poké Ball loader
+    const loader = document.getElementById("loadingScreen");
+    window.addEventListener("load", () => {
+      setTimeout(() => loader.classList.add("fade-out"), 1500);
+    });
+
+    // Touch controls (mobile)
+    document.querySelectorAll("[data-key]").forEach(btn => {
+      btn.addEventListener("touchstart", e => {
+        e.preventDefault();
+        document.dispatchEvent(new KeyboardEvent("keydown", { key: btn.dataset.key }));
+      });
+      btn.addEventListener("touchend", e => {
+        e.preventDefault();
+        document.dispatchEvent(new KeyboardEvent("keyup", { key: btn.dataset.key }));
+      });
+    });
+  </script>
+</body>
+</html>

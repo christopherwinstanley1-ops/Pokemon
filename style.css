@@ -1,0 +1,417 @@
+/* ========== GLOBAL ========== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg, #0b0d12, #111a2b, #1b0b17);
+  background-size: 300% 300%;
+  animation: bgShift 12s ease-in-out infinite;
+  color: white;
+  overflow-x: hidden;
+}
+
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ========== HEADER ========== */
+.header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .8rem 1rem;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+}
+
+.title {
+  font-size: 1.4rem;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ========== SEARCH BAR ========== */
+.searchbar {
+  text-align: center;
+  margin: 2rem 0 1rem;
+}
+
+#searchInput {
+  width: 80%;
+  max-width: 400px;
+  padding: .8rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.3);
+  color: white;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#searchInput:focus {
+  border-color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 0 10px rgba(255,0,0,0.5), 0 0 15px rgba(59,76,202,0.5);
+}
+
+/* ========== POKEDEX GRID ========== */
+.pokedex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+  justify-items: center;
+}
+
+/* ========== POKEDEX CARD ========== */
+.pokedex-card {
+  width: 220px;
+  background: linear-gradient(145deg, rgba(20,22,30,0.95), rgba(10,10,15,0.9));
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7), inset 0 0 20px rgba(255,255,255,0.03);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease, box-shadow 0.5s ease;
+  position: relative;
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.pokedex-card:nth-child(1) { animation-delay: .1s; }
+.pokedex-card:nth-child(2) { animation-delay: .2s; }
+.pokedex-card:nth-child(3) { animation-delay: .3s; }
+.pokedex-card:nth-child(4) { animation-delay: .4s; }
+
+@keyframes fadeInUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pokedex-card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 0 25px rgba(255,0,0,0.5), 0 0 35px rgba(59,76,202,0.4);
+  border-color: rgba(255,255,255,0.25);
+}
+
+.pokedex-thumb {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  filter: brightness(0.9);
+  transition: filter 0.3s ease;
+}
+
+.pokedex-card:hover .pokedex-thumb {
+  filter: brightness(1.1);
+}
+
+.pokedex-body {
+  text-align: center;
+  padding: .8rem;
+}
+
+.pokedex-title {
+  font-weight: bold;
+  font-size: 1rem;
+  margin: .4rem 0;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(255,255,255,0.2);
+}
+
+.badge {
+  display: inline-block;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  background: linear-gradient(90deg, #e3350d, #3b4cca);
+  box-shadow: 0 0 8px rgba(227,53,13,0.5);
+}
+
+/* ========== PLAY PAGE ========== */
+.play-mode {
+  background: black;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.game-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.75);
+  padding: .5rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(6px);
+}
+
+.pill {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 999px;
+  color: white;
+  padding: .4rem 1rem;
+  cursor: pointer;
+  font-size: .9rem;
+  transition: all 0.2s ease;
+}
+
+.pill:hover {
+  background: rgba(255,255,255,.2);
+}
+
+.game-title {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  flex: 1;
+}
+
+/* ========== EMULATOR DISPLAY ========== */
+.game-canvas {
+  width: 100%;
+  height: calc(100vh - 60px);
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Centers EmulatorJS player correctly */
+.EJS_player,
+#gameCanvas {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100%;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+}
+
+/* Makes the GBA screen scale correctly */
+canvas {
+  width: 100% !important;
+  max-width: 960px;
+  height: auto !important;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+  background: #000;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .pokedex-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  .pokedex-card {
+    width: 160px;
+  }
+
+  #searchInput {
+    width: 90%;
+  }
+
+  .game-toolbar {
+    flex-direction: column;
+    gap: .5rem;
+  }
+}
+
+/* ========== POKÉ BALL LOADING ANIMATION ========== */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, #111 0%, #000 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loading-screen.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.pokeball-spinner {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  position: relative;
+  background: linear-gradient(to bottom, #e3350d 50%, #fff 50%);
+  border: 4px solid #000;
+  box-shadow: 0 0 0 4px #000 inset;
+  animation: spin 1.2s linear infinite;
+}
+
+.pokeball-spinner::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: #000;
+  transform: translateY(-50%);
+}
+
+.pokeball-spinner::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border: 4px solid #000;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ====== ENHANCED GBA CONSOLE LOOK ====== */
+.gba-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.gba-frame {
+  width: 100%;
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+  transform: rotateX(2deg) rotateY(-1deg);
+  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.7));
+  animation: float 5s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  0%   { transform: rotateX(2deg) rotateY(-1deg) translateY(0); }
+  100% { transform: rotateX(1deg) rotateY(1deg) translateY(-8px); }
+}
+
+/* Screen alignment for your transparent GBA image */
+.gba-screen {
+  position: absolute;
+  top: 19%;
+  left: 23%;
+  width: 54%;
+  height: 43%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 2;
+  border-radius: 6px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5) inset;
+}
+
+/* Soft reflection under console */
+.gba-wrapper::after {
+  content: "";
+  position: absolute;
+  bottom: -35px;
+  width: 70%;
+  height: 10px;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, transparent 70%);
+  filter: blur(8px);
+  z-index: 0;
+  transform: scaleY(0.8);
+}
+
+/* ====== ENHANCED BUTTON CONTROLS ====== */
+.controls-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.btn, .dpad button {
+  position: absolute;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  width: 48px;
+  height: 48px;
+  pointer-events: auto;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+.btn:active, .dpad button:active {
+  transform: scale(0.9);
+  background: rgba(255,255,255,0.25);
+}
+
+/* Position buttons accurately */
+.btn.a { bottom: 34%; right: 14%; }
+.btn.b { bottom: 44%; right: 25%; }
+
+.btn.start {
+  bottom: 9%; left: 52%;
+  border-radius: 20px;
+  width: 60px; height: 25px;
+}
+.btn.select {
+  bottom: 9%; left: 36%;
+  border-radius: 20px;
+  width: 60px; height: 25px;
+}
+
+/* D-Pad */
+.dpad {
+  position: absolute;
+  bottom: 36%;
+  left: 11%;
+  width: 120px;
+  height: 120px;
+}
+
+.dpad button {
+  width: 38px;
+  height: 38px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+}
+
+.dpad .up { top: 0; left: 40px; }
+.dpad .down { bottom: 0; left: 40px; }
+.dpad .left { left: 0; top: 40px; }
+.dpad .right { right: 0; top: 40px; }
+
+.dpad button, .btn {
+  border: 1px solid rgba(255,255,255,0.15);
+}
